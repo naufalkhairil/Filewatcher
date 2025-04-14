@@ -1,0 +1,8 @@
+pubsub:
+  credential: credential.json
+  project: data-dev
+  topic: stream-pubsub
+
+filewatcher:
+  source-dir: source
+  handler: pubsub # supported handler: log, pubsub
