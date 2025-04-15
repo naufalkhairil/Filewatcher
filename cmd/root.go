@@ -4,10 +4,11 @@ Copyright © 2025 Naufal Khairil Imami
 package cmd
 
 import (
-	"log"
 	"os"
 	"path"
 	"strings"
+
+	log "github.com/sirupsen/logrus"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -46,4 +47,19 @@ func init() {
 	if err := viper.ReadInConfig(); err != nil {
 		log.Fatalf("Error reading config file, %s", err)
 	}
+
+	logLevel := log.InfoLevel
+	logLevelCfg := viper.GetString("log.level")
+	if logLevelCfg != "" {
+		parseLevel, err := log.ParseLevel(logLevelCfg)
+		if err != nil {
+			log.Fatalf("Failed to parse log level, %s", err)
+		}
+
+		logLevel = parseLevel
+	}
+	log.SetLevel(logLevel)
+	log.SetOutput(os.Stdout)
+	log.SetFormatter(&log.TextFormatter{})
+
 }

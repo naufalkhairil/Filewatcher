@@ -1,10 +1,12 @@
 package handler
 
 import (
-	"log"
+	log "github.com/sirupsen/logrus"
 
 	"github.com/naufalkhairil/Filewatcher/modules/event"
 )
+
+var logger = log.WithField("modules", "handler")
 
 var HandlerMap map[string]Handler = make(map[string]Handler)
 
@@ -19,10 +21,10 @@ func InitHandler() {
 
 func GetHandler(handlerType string) Handler {
 	if handler, ok := HandlerMap[handlerType]; ok {
-		log.Printf("Using %s handler", handlerType)
+		logger.Infof("Using %s handler", handlerType)
 		return handler
 	}
 
-	log.Print("Using log handler")
+	logger.Info("Using log handler")
 	return HandlerMap["log"]
 }

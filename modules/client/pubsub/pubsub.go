@@ -2,8 +2,9 @@ package pubsub
 
 import (
 	"context"
-	"log"
 	"sync"
+
+	log "github.com/sirupsen/logrus"
 
 	"cloud.google.com/go/pubsub"
 	"gitlab.com/watonist/letsgo/bootstrap"
@@ -13,13 +14,15 @@ import (
 var client *pubsub.Client
 var clientOnce sync.Once
 
+var logger = log.WithField("modules", "pubsub")
+
 func GetClient() *pubsub.Client {
 	clientOnce.Do(func() {
 		ctx, cancel := context.WithTimeout(context.Background(), GetConnectTimeout())
 		defer cancel()
 		psClient, err := pubsub.NewClient(ctx, GetProject(), option.WithCredentialsFile(GetCredentialFile()))
 		if err != nil {
-			log.Fatalf("Unable to create pubsub client, %s", err)
+			logger.WithError(err).Fatal("Unable to create pubsub client")
 		}
 		client = psClient
 
@@ -28,9 +31,9 @@ func GetClient() *pubsub.Client {
 				return
 			}
 
-			log.Println("Closing pubsub client ...")
+			logger.Debug("Closing pubsub client ...")
 			if err := client.Close(); err != nil {
-				log.Fatalf("Failed to close pubsub client, %s", err)
+				logger.WithError(err).Fatal("Failed to close pubsub client")
 			}
 		})
 

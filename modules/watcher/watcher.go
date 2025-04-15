@@ -1,10 +1,11 @@
 package watcher
 
 import (
-	"log"
 	"os"
 	"sync"
 	"time"
+
+	log "github.com/sirupsen/logrus"
 
 	"github.com/fsnotify/fsnotify"
 	eventModules "github.com/naufalkhairil/Filewatcher/modules/event"
@@ -18,8 +19,10 @@ var handler handlerModules.Handler
 
 var pendingEvents map[string]*time.Timer
 
+var logger = log.WithField("modules", "watcher")
+
 func Start() error {
-	log.Printf("Starting filewatcher on %s ...", GetSourceDir())
+	logger.WithField("source", GetSourceDir()).Info("Starting filewatcher ...")
 
 	watcherDone = make(chan bool)
 	pendingEvents = make(map[string]*time.Timer)
@@ -39,7 +42,7 @@ func Start() error {
 		defer watcherWaitGroup.Done()
 		for {
 			if err := watcher.Add(GetSourceDir()); err != nil {
-				log.Fatalf("Failed to watch directory, %s", err)
+				log.WithError(err).WithField("source", GetSourceDir()).Fatal("Failed to watch directory")
 			}
 		}
 	}(watcher)

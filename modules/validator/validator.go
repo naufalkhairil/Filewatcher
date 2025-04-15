@@ -5,13 +5,16 @@ import (
 	"encoding/hex"
 	"fmt"
 	"io"
-	"log"
 	"os"
 	"time"
+
+	log "github.com/sirupsen/logrus"
 )
 
+var logger = log.WithField("modules", "validator")
+
 func ValidateFile(filePath string) (bool, error) {
-	log.Printf("Validating file %s", filePath)
+	logger.WithField("file", filePath).Debug("Validating file ...")
 
 	fileHash, err := generateHash(filePath)
 	if err != nil {
@@ -27,7 +30,7 @@ func ValidateFile(filePath string) (bool, error) {
 
 		// Refreshing hash
 		time.Sleep(1 * time.Second)
-		log.Printf("Refreshing hash ...")
+		logger.Debug("Refreshing hash ...")
 		freshHash, err := generateHash(filePath)
 		if err != nil {
 			return false, err
