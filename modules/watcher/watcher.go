@@ -58,6 +58,8 @@ func ProcessEvents() {
 	ticker := time.NewTicker(time.Second * 5)
 	defer ticker.Stop()
 
+	watchedEvents := GetWatchedEvents()
+
 	for {
 
 		select {
@@ -67,9 +69,8 @@ func ProcessEvents() {
 				continue
 			}
 
-			log.Printf("Received event: %s op: %s", event.Name, event.Op.String())
-
-			if event.Op&(fsnotify.Create|fsnotify.Write|fsnotify.Rename) != 0 {
+			// log.Printf("Received event: %s op: %s", event.Name, event.Op.String())
+			if event.Op&watchedEvents != 0 {
 				handleEvent(event)
 			}
 

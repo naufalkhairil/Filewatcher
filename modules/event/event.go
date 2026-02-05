@@ -21,11 +21,15 @@ func GenerateMetadata(event fsnotify.Event) (EventMetadata, error) {
 		TsReceive: time.Now(),
 	}
 
-	fileInfo, err := os.Stat(event.Name)
-	if err != nil {
-		return metadata, err
+	if metadata.Op != "REMOVE" {
+		fileInfo, err := os.Stat(event.Name)
+		if err != nil {
+			return metadata, err
+		}
+		metadata.Size = int(fileInfo.Size())
+	} else {
+		metadata.Size = 0
 	}
-	metadata.Size = int(fileInfo.Size())
 
 	return metadata, nil
 }

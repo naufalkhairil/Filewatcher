@@ -6,3 +6,5 @@ pubsub:
 filewatcher:
   source-dir: source
   handler: pubsub # supported handler: log, pubsub
+  refresh-interval: 5
+  events: ["create", "write", "rename"]
