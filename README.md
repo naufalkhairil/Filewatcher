@@ -37,9 +37,8 @@ pubsub:
 filewatcher:
   source-dir: /path/to/watch
   handler: pubsub # supported: log, pubsub
-
-log:
-  level: info # debug, info, warn, error
+  refresh-interval: 5
+  events: ["create", "write", "rename"]
 ```
 
 ### Configuration Options
