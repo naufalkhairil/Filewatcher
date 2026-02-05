@@ -67,7 +67,7 @@ func ProcessEvents() {
 				continue
 			}
 
-			// log.Printf("Received event: %s op: %s", event.Name, event.Op.String())
+			log.Printf("Received event: %s op: %s", event.Name, event.Op.String())
 
 			if event.Op&(fsnotify.Create|fsnotify.Write|fsnotify.Rename) != 0 {
 				handleEvent(event)

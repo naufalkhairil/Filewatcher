@@ -19,7 +19,7 @@ func GetSourceDir() string {
 func GetRefreshInterval() time.Duration {
 	duration := viper.GetDuration(cfgRefreshInterval)
 	if duration == time.Duration(0) {
-		return 5 * time.Second
+		return 1 * time.Second
 	}
 
 	return duration

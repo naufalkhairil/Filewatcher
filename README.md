@@ -111,10 +111,6 @@ Run tests:
 go test ./...
 ```
 
-## License
-
-Licensed under the terms specified in the LICENSE file.
-
 ## Author
 
 Naufal Khairil Imami
